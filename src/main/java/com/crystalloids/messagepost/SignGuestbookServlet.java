@@ -1,58 +1,87 @@
-/*
- * Copyright 2016 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-//[START all]
-
 package com.crystalloids.messagepost;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import java.util.Date;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.QueryResults;
+
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.crystalloids.messagepost.Mpost;
 
-//[START all]
 public class SignGuestbookServlet extends HttpServlet {
 
-  /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 // Process the HTTP POST of the form
-  @Override
-  public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    Greeting greeting;
+	@Override
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-    UserService userService = UserServiceFactory.getUserService();
-    User user = userService.getCurrentUser(); // Find out who the user is.
+		Mpost mpost;
+		Mpost checkPost;
 
-    String guestbookName = req.getParameter("guestbookName");
-    String content = req.getParameter("content");
-    if (user != null) {
-      greeting = new Greeting(guestbookName, content, user.getUserId(), user.getEmail());
-    } else {
-      greeting = new Greeting(guestbookName, content);
-    }
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser(); // Find out who the user is.
+		String title = req.getParameter("postTitle") == null ? "Default" : req.getParameter("postTitle");
+		String content = req.getParameter("content");
+		Boolean isUpdate = req.getParameter("isUpdate") == null ? false : true;
+		String userEmail = user.getEmail();
 
-    greeting.save();
+		System.out.println("Here ");
+		System.out.println(userEmail);
+		System.out.println(title);
+		System.out.println(isUpdate);
 
-    resp.sendRedirect("/guestbook.jsp?guestbookName=" + guestbookName);
-  }
+		if (!isUpdate) {
+			checkPost = Mpost.getMpost(title, userEmail);
+
+			if (checkPost != null) {
+				System.out.println("Cant create the post with same title");
+				resp.sendRedirect("/duplicatepost.jsp?postTitle=" + title + "&postAuthor=" + userEmail);
+			}
+	    
+			else {
+
+		mpost = new Mpost(title, content, userEmail);
+		mpost.save();
+
+		resp.sendRedirect("/messagepost.jsp?postTitle=" + title + "&postAuthor=" + userEmail);
+		
+			}
+
+	}
+	}
+
+	@Override
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+//	    Mpost post = Mpost.getMpost(postTitle) ; 
+//	    String postContent = post.getContent();
+//	    String postAuthor = post.getAuthorEmail();
+//	    Date postDate = post.getDate();
+
+		String postTitle = req.getParameter("postTitle");
+		String postAuthor = req.getParameter("postAuthor");
+		String method = req.getParameter("method");
+
+		Boolean updatePost = method != null && method.equals("update");
+
+		if (updatePost) {
+			resp.sendRedirect("/updatepost.jsp?postTitle=" + postTitle + "&postAuthor=" + postAuthor);
+		}
+
+		else {
+
+			resp.sendRedirect("/messagepost.jsp?postTitle=" + postTitle + "&postAuthor=" + postAuthor);
+
+		}
+
+	}
 }
-//[END all]

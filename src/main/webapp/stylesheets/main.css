@@ -1,4 +1,17 @@
 body {
-    font-family: Verdana, Helvetica, sans-serif;
-    background-color: #FFFFCC;
+    font-family: Helvetica Neue;
+    background-color: #FFFFFF;
+    
+    	.container { width: 500px; clear: both; } 
+    	.container input { width:
+		100%; clear: both; }
+		
+	body {
+    color: grey;
+}
+
+h1 {
+    color: green;
+}
+	
 }

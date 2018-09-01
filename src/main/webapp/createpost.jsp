@@ -21,11 +21,7 @@
 	<%-- from there --%>
 
 	<%
-		String postTitle = request.getParameter("postTitle");
-		if (postTitle == null) {
-			postTitle = "Default";
-		}
-		pageContext.setAttribute("postTitle", postTitle);
+		
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		if (user == null) {
@@ -39,7 +35,7 @@
 
 	<%
 		} else {
-			pageContext.setAttribute("user", user);
+			pageContext.setAttribute("postAuthor", user);
 	%>
 
 	<p>
@@ -48,48 +44,26 @@
 			out</a>.)
 	</p>
 
-	<%
-			Mpost post = new Mpost();
-			List<Mpost> posts = post.getMposts();
-
-			if (posts.isEmpty()) {
-	%>
-	<p>No posts by users yet.</p>
-	<%
-		} else {
-	%>
-	<p>Post by users</p>
-	<%
-		for (Mpost vpost : posts) {
-					pageContext.setAttribute("postTitle", vpost.getTitle());
-					String author;
-					author = vpost.getAuthorEmail();
-					pageContext.setAttribute("postAuthor", author);
-	%>
-	<a href="postPage?postTitle=${fn:escapeXml(postTitle)}&postAuthor=${fn:escapeXml(postAuthor)}">
-	 ${fn:escapeXml(postTitle)}</a>
-	 by:
-	 ${fn:escapeXml(postAuthor)}
-	<p></p>
-
-	<%
-		}
-			}
-	%>
-
-
-	<form action="/createPost" method="post">
+	<form action="/sign" method="post">
 		<div>
-			<input type="submit" value="Create New Post" />
+			<textarea name="content" rows="3" cols="60">Insert the post content</textarea>
 		</div>
- 		<input type="Hidden" name="createPost"
-			value=true> 
+		<div>
+			<textarea name="postTitle" rows="1" cols="25">Provide a title</textarea>
+		</div>
+		<div>
+			<input type="submit" value="Submit Post" />
+		</div>
+		<input type="Hidden" name="postTitle"
+			value="${fn:escapeXml(postTitle)}">
+		<input type="Hidden" name="postAuthor"
+			value="${fn:escapeXml(postAuthor)}">	
 	</form> 
 
 	<%
-
 		}
 	%>
+	
 
 </body>
 </html>

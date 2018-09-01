@@ -1,7 +1,7 @@
 indexes:
 
-- kind: Greeting
-  ancestor: yes
+- kind: Mpost
+  ancestor: no
   properties:
   - name: date
     direction: desc

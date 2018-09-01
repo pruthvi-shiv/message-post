@@ -22,10 +22,9 @@
 
 	<%
 		String postTitle = request.getParameter("postTitle");
-		if (postTitle == null) {
-			postTitle = "Default";
-		}
 		pageContext.setAttribute("postTitle", postTitle);
+		String postAuthor = request.getParameter("postAuthor");
+		pageContext.setAttribute("postAuthor", postAuthor);
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		if (user == null) {
@@ -48,24 +47,8 @@
 			out</a>.)
 	</p>
 
-	<%
-			Mpost post = new Mpost();
-			List<Mpost> posts = post.getMposts();
-
-			if (posts.isEmpty()) {
-	%>
-	<p>No posts by users yet.</p>
-	<%
-		} else {
-	%>
-	<p>Post by users</p>
-	<%
-		for (Mpost vpost : posts) {
-					pageContext.setAttribute("postTitle", vpost.getTitle());
-					String author;
-					author = vpost.getAuthorEmail();
-					pageContext.setAttribute("postAuthor", author);
-	%>
+    <h1> Post already exists for your name, click the below link to update the post</h1>
+	
 	<a href="postPage?postTitle=${fn:escapeXml(postTitle)}&postAuthor=${fn:escapeXml(postAuthor)}">
 	 ${fn:escapeXml(postTitle)}</a>
 	 by:
@@ -73,21 +56,6 @@
 	<p></p>
 
 	<%
-		}
-			}
-	%>
-
-
-	<form action="/createPost" method="post">
-		<div>
-			<input type="submit" value="Create New Post" />
-		</div>
- 		<input type="Hidden" name="createPost"
-			value=true> 
-	</form> 
-
-	<%
-
 		}
 	%>
 
