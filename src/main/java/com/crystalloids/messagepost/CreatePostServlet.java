@@ -24,7 +24,6 @@ public class CreatePostServlet extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-		Mpost mpost;
 		resp.sendRedirect("/createpost.jsp?");
 
 	}
@@ -36,14 +35,16 @@ public class CreatePostServlet extends HttpServlet {
 //	    Mpost post;
 
 		String postTitle = req.getParameter("postTitle");
-		String authorEmail = req.getParameter("authorEmail");
+//		String authorEmail = req.getParameter("authorEmail");
 
 		resp.sendRedirect("/messagepost.jsp?postTitle=" + postTitle);
 
-		Mpost post = Mpost.getMpost(postTitle, authorEmail);
-		String postContent = post.getContent();
-		String postAuthor = post.getAuthorEmail();
-		Date postDate = post.getDate();
+//		Mpost post = Mpost.getMpost(postTitle, authorEmail);
+//		String postContent = post.getContent();
+//		String postAuthor = post.getAuthorEmail();
+//		Date postDate = post.getDate();
 
 	}
+	
+
 }

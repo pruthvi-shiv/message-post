@@ -8,8 +8,20 @@
 <%@ page import="com.crystalloids.messagepost.Mpost"%>
 <%-- //[END imports]--%>
 
-<%@ page import="java.util.List"%>
+ <%@ page import="java.util.List"%>
+<%--<%@ page import="org.json.JSONObject" %>
+<%@ page import="org.apache.http.HttpEntity"%>
+<%@ page import="org.apache.http.HttpResponse"%>
+<%@ page import="org.apache.http.client.ClientProtocolException"%>
+<%@ page import="org.apache.http.client.ResponseHandler"%>
+<%@ page import="org.apache.http.client.methods.HttpGet"%>
+<%@ page import="org.apache.http.impl.client.CloseableHttpClient"%>
+<%@ page import="org.apache.http.client.methods.CloseableHttpResponse"%>
+<%@ page import="org.apache.http.impl.client.HttpClients"%>
+<%@ page import="org.apache.http.util.EntityUtils"%> --%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+<%-- Only place where all the posts are fetched instead of using the REST API --%>
 
 <html>
 <head>
@@ -38,6 +50,7 @@
 	</p>
 
 	<%
+
 		} else {
 			pageContext.setAttribute("user", user);
 	%>
@@ -76,7 +89,6 @@
 		}
 			}
 	%>
-
 
 	<form action="/createPost" method="post">
 		<div>
