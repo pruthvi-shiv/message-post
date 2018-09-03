@@ -5,11 +5,14 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
 <%-- //[START imports]--%>
-<%@ page import="com.crystalloids.messagepost.Mpost"%>
+<%@ page import="com.crystalloids.messagepost.RestUtils"%>
+<%@ page import="org.json.JSONException"%>
+<%@ page import="org.json.JSONObject"%>
+<%@ page import="org.json.JSONArray"%>
 <%-- //[END imports]--%>
 
 <%@ page import="java.util.List"%>
-<%@ page import="org.json.JSONObject" %>
+<%@ page import="org.json.JSONObject"%>
 <%@ page import="org.apache.http.HttpEntity"%>
 <%@ page import="org.apache.http.HttpResponse"%>
 <%@ page import="org.apache.http.client.ClientProtocolException"%>
@@ -61,10 +64,11 @@
 	</p>
 
 	<%
-			Mpost post = new Mpost();
-			List<Mpost> posts = post.getMposts();
+			JSONObject jPost = new JSONObject();
+			jPost = RestUtils.apiGetall();
+			
 
-			if (posts.isEmpty()) {
+			if (jPost.length() ==0) {
 	%>
 	<p>No posts by users yet.</p>
 	<%
@@ -72,16 +76,26 @@
 	%>
 	<h1>Post by all users</h1>
 	<%
-		for (Mpost vpost : posts) {
+/*  for (Mpost vpost : posts) {
 					pageContext.setAttribute("postTitle", vpost.getTitle());
 					String author;
 					author = vpost.getAuthorEmail();
-					pageContext.setAttribute("postAuthor", author);
+					pageContext.setAttribute("postAuthor", author);  */
+					
+					JSONArray jsonarray = new JSONArray(jPost.get("items").toString());
+					
+					   for (int i = 0; i < jsonarray.length(); i++) {
+						    JSONObject jsonobject = jsonarray.getJSONObject(i);
+						    
+						    String title = jsonobject.getString("title");
+						    pageContext.setAttribute("postTitle", title);
+						    String author = jsonobject.getString("authorEmail");
+						    pageContext.setAttribute("postAuthor", author);
+					
 	%>
-	<a href="postPage?postTitle=${fn:escapeXml(postTitle)}&postAuthor=${fn:escapeXml(postAuthor)}">
-	 ${fn:escapeXml(postTitle)}</a>
-	 by:
-	 ${fn:escapeXml(postAuthor)}
+	<a
+		href="postPage?postTitle=${fn:escapeXml(postTitle)}&postAuthor=${fn:escapeXml(postAuthor)}">
+		${fn:escapeXml(postTitle)}</a> by: ${fn:escapeXml(postAuthor)}
 	<p></p>
 
 	<%
@@ -94,9 +108,8 @@
 		<div>
 			<input type="submit" value="Create New Post" />
 		</div>
- 		<input type="Hidden" name="createPost"
-			value=true> 
-	</form> 
+		<input type="Hidden" name="createPost" value=true>
+	</form>
 
 	<%
 
