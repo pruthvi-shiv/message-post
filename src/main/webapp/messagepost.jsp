@@ -6,7 +6,7 @@
 <%@ page import="java.util.Date"%>
 
 <%-- //[START imports]--%>
-<%@ page import="com.crystalloids.messagepost.Mpost"%>
+<%--@ page import="com.crystalloids.messagepost.Mpost"--%>
 <%@ page import="com.crystalloids.messagepost.RestUtils"%>
 <%@ page import="org.json.JSONException"%>
 <%@ page import="org.json.JSONObject"%>

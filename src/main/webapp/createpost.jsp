@@ -5,7 +5,7 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 
 <%-- //[START imports]--%>
-<%@ page import="com.crystalloids.messagepost.Mpost"%>
+<%--@ page import="com.crystalloids.messagepost.Mpost"--%>
 <%-- //[END imports]--%>
 
 <%@ page import="java.util.List"%>
