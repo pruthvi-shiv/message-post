@@ -13,19 +13,19 @@
 	version="3.1">
 	<!-- [START standard_mappings] -->
 	<servlet>
-		<servlet-name>sign</servlet-name>
-		<servlet-class>com.crystalloids.messagepost.SignGuestbookServlet</servlet-class>
+		<servlet-name>mainPost</servlet-name>
+		<servlet-class>com.crystalloids.messagepost.MessagePostServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>sign</servlet-name>
-		<url-pattern>/sign</url-pattern>
+		<servlet-name>mainPost</servlet-name>
+		<url-pattern>/mainPost</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>postPage</servlet-name>
-		<servlet-class>com.crystalloids.messagepost.SignGuestbookServlet</servlet-class>
+		<servlet-class>com.crystalloids.messagepost.MessagePostServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
@@ -47,7 +47,7 @@
 
 
 	<welcome-file-list>
-		<welcome-file>guestbook.jsp</welcome-file>
+		<welcome-file>welcome.jsp</welcome-file>
 	</welcome-file-list>
 	
 	<!-- [END standard_mappings] -->

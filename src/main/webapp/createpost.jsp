@@ -21,7 +21,6 @@
 	<%-- from there --%>
 
 	<%
-		
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		if (user == null) {
@@ -44,26 +43,33 @@
 			out</a>.)
 	</p>
 
-	<form action="/sign" method="post">
+	<script type="text/javascript">
+		function validateForm() {
+			var a = document.forms["Form"]["postTitle"].value;
+			var b = document.forms["Form"]["content"].value;
+			if (a == null || a == "", b == null || b == "") {
+				alert("Please Fill All Required Field");
+				return false;
+			}
+		}
+	</script>
+	<form name = "Form" action="/mainPost" method="post" onsubmit="return validateForm()">
 		<div>
-			<textarea name="content" rows="3" cols="60">Insert the post content</textarea>
-		</div>
-		<div>
-			<textarea name="postTitle" rows="1" cols="25">Provide a title</textarea>
-		</div>
-		<div>
+			<label for="title">Title</label> <input type="text" id="fname"
+				name="postTitle" placeholder="Post Title.."> <label
+				for="content">Content</label> <input style="height: 150px;"
+				type="text" id="lname" name="content" placeholder="Post Content..">
 			<input type="submit" value="Submit Post" />
 		</div>
 		<input type="Hidden" name="postTitle"
-			value="${fn:escapeXml(postTitle)}">
-		<input type="Hidden" name="postAuthor"
-			value="${fn:escapeXml(postAuthor)}">	
-	</form> 
+			value="${fn:escapeXml(postTitle)}"> <input type="Hidden"
+			name="postAuthor" value="${fn:escapeXml(postAuthor)}">
+	</form>
 
 	<%
 		}
 	%>
-	
+
 
 </body>
 </html>

@@ -7,6 +7,9 @@
 
 <%-- //[START imports]--%>
 <%@ page import="com.crystalloids.messagepost.Mpost"%>
+<%@ page import="com.crystalloids.messagepost.RestUtils"%>
+<%@ page import="org.json.JSONException"%>
+<%@ page import="org.json.JSONObject"%>
 <%-- //[END imports]--%>
 
 <%@ page import="java.util.List"%>
@@ -25,7 +28,7 @@
 		String postTitle = request.getParameter("postTitle");
 		pageContext.setAttribute("postTitle", postTitle);
 		String postAuthor = request.getParameter("postAuthor");
-		pageContext.setAttribute("postTitle", postAuthor);
+		pageContext.setAttribute("postAuthor", postAuthor);
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		pageContext.setAttribute("user", user);
@@ -38,16 +41,17 @@
 	</p>
 
 	<%
-		Mpost vpost = Mpost.getMpost(postTitle, postAuthor);
-		if (vpost.getTitle().isEmpty()) {
+		JSONObject jPost = new JSONObject();
+		jPost = RestUtils.apiGet(postAuthor, postTitle);
+		if (jPost.length() == 0) {
 	%>
 	<p>Something went wrong.</p>
 	<%
 		} else {
-			pageContext.setAttribute("post_title", vpost.getTitle());
-			pageContext.setAttribute("post_author", vpost.getAuthorEmail());
-			pageContext.setAttribute("post_content", vpost.getContent());
-			pageContext.setAttribute("post_createdDate", vpost.getDate());
+			pageContext.setAttribute("post_title", jPost.get("title"));
+			pageContext.setAttribute("post_author", jPost.get("authorEmail"));
+			pageContext.setAttribute("post_content", jPost.get("content"));
+			pageContext.setAttribute("post_createdDate", jPost.get("date"));
 	%>
 	<b>${fn:escapeXml(post_title)}</b> by: ${fn:escapeXml(post_author)}
 	<p></p>
@@ -66,29 +70,25 @@
 
 			if (isUserAuthor) {
 		%>
-
-
-		
-	<form action="/sign" method="post">
+	
+	<form action="/mainPost" method="post">
 		<div>
 			<textarea name="content" rows="3" cols="60">${fn:escapeXml(post_content)}</textarea>
 		</div>
 		<div>
 			<input type="submit" value="Submit Post" />
 		</div>
-		<input type="Hidden" name="postTitle"
-			value="${fn:escapeXml(postTitle)}">
-		<input type="Hidden" name="postAuthor"
-			value="${fn:escapeXml(postAuthor)}">	
-		<input type="Hidden" name="isUpdate" value="true">	
-	</form> 
+		<input type="Hidden" name="postTitle" value="${fn:escapeXml(postTitle)}" /> 
+		<input type="Hidden" name="postAuthor" value="${fn:escapeXml(postAuthor)}" /> 
+		<input type="Hidden" name="isUpdate" value="true" />
+	</form>
 
 	<%
 		}
 	%>
-	
+
 	<div class="container">
-		<form action="guestbook.jsp">
+		<form action="welcome.jsp">
 			<input type="submit" value="Home" />
 		</form>
 	</div>
