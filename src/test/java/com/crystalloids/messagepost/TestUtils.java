@@ -53,7 +53,7 @@ public class TestUtils {
   public static void wipeDatastore() {
     Datastore datastore = getDatastore();
     QueryResults<Key> guestbooks =
-        datastore.run(Query.newKeyQueryBuilder().setKind("Greeting").build());
+        datastore.run(Query.newKeyQueryBuilder().setKind("Mpost").build());
     ArrayList<Key> keys = Lists.newArrayList(guestbooks);
 
     if (!keys.isEmpty()) {

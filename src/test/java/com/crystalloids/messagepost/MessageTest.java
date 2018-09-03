@@ -17,36 +17,39 @@
 package com.crystalloids.messagepost;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import com.crystalloids.messagepost.RestUtils;
+import org.json.JSONObject;
 
 @RunWith(JUnit4.class)
-public class GreetingTest {
+public class MessageTest {
 
-  @Before
-  public void setUp() {
-    TestUtils.startDatastore();
-  }
+//	@Before
+//	public void setUp() {
+//		TestUtils.startDatastore();
+//	}
 
-  @Test
-  public void testSaveGreeting() throws Exception {
-    Greeting greeting = new Greeting(null, "Test!");
-    greeting.save();
+	@Test
+	public void testSaveGreeting() throws Exception {
+		int n = (int) (Math.random() * 100) * (int)(Math.random() * 100);
+		JSONObject j = new JSONObject();
+		String authorEmail = "test@superawesometest.com";
+		String content = "Test post built during the app engine build" + n;
+		String title = "Test post " + n;
+		String contentReturn = new String ();
 
-    Guestbook guestbook = new Guestbook(null);
-    List<Greeting> greetings = guestbook.getGreetings();
-    assertTrue(greetings.size() == 1);
-    assertEquals(greeting, greetings.get(0));
-  }
+		RestUtils.apiPost(authorEmail, content, title);
 
-  @After
-  public void tearDown() {
-    TestUtils.stopDatastore();
-  }
+		j = RestUtils.apiGet(authorEmail, title);
+		contentReturn = j.get("content").toString();
+		assertEquals(contentReturn, content);
+	}
+
+//	@After
+//	public void tearDown() {
+//		TestUtils.stopDatastore();
+//	}
 }
