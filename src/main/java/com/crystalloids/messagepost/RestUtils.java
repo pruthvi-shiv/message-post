@@ -69,8 +69,40 @@ public class RestUtils {
 			
 		    HttpEntity entity1 = response1.getEntity();
 		    
+		    System.out.println(status);
+		    
 	        if (status.equals( "HTTP/1.1 200 OK")) {
 	        	result = new JSONObject(EntityUtils.toString(entity1));      	
+		} EntityUtils.consume(entity1);
+		}
+	        
+	        finally {
+			//response1.close();
+	        //do nothing
+		}
+		
+		return (result);
+
+	}
+	
+	public static JSONObject apiGetall()
+			throws ClientProtocolException, IOException, ParseException, JSONException
+
+	{
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		String url = base_url + "getPosts";
+		HttpGet httpGet = new HttpGet(url);
+		JSONObject result = new JSONObject();
+
+		CloseableHttpResponse response1 = httpclient.execute(httpGet);
+		try {
+			
+			String status = response1.getStatusLine().toString(); 
+			
+		    HttpEntity entity1 = response1.getEntity();
+		    
+	        if (status.equals( "HTTP/1.1 200 OK")) {
+	        	result = new JSONObject(EntityUtils.toString(entity1));    
 		} EntityUtils.consume(entity1);
 		}
 	        
